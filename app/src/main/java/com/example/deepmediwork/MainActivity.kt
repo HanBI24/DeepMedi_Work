@@ -16,7 +16,9 @@ import androidx.navigation.compose.rememberNavController
 import com.example.deepmediwork.presentation.navigation.SetUpNavGraph
 import com.example.deepmediwork.presentation.view.main.MainScreen
 import com.example.deepmediwork.ui.theme.DeepMediWorkTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     lateinit var navController: NavHostController
 
