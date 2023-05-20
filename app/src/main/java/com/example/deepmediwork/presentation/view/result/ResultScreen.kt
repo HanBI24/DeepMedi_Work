@@ -23,7 +23,6 @@ fun ResultScreen(
 ) {
     Column {
         ResultTopAppBar(
-            title = "측정 결과",
             navController = navController
         )
     }
@@ -31,7 +30,6 @@ fun ResultScreen(
 
 @Composable
 fun ResultTopAppBar(
-    title: String,
     navController: NavHostController
 ) {
     Box(
@@ -57,7 +55,7 @@ fun ResultTopAppBar(
             modifier = Modifier
                 .padding(top = 36.dp, bottom = 20.dp)
                 .align(Alignment.Center),
-            text = title,
+            text = "측정 결과",
             style = TextStyle(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold

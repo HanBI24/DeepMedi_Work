@@ -26,7 +26,7 @@ fun MainScreen(
     navController: NavHostController
 ) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        HomeTopAppBar(title = "홈")
+        HomeTopAppBar()
         RecognizeText()
         CameraArea()
         ShotButton(navController)
@@ -34,7 +34,7 @@ fun MainScreen(
 }
 
 @Composable
-fun HomeTopAppBar(title: String) {
+fun HomeTopAppBar() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -42,7 +42,7 @@ fun HomeTopAppBar(title: String) {
         Text(
             modifier = Modifier
                 .padding(top = 36.dp, start = 32.dp, bottom = 20.dp),
-            text = title,
+            text = "홈",
             style = TextStyle(
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Bold
