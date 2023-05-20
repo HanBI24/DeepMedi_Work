@@ -3,6 +3,7 @@ package com.example.deepmediwork.presentation.view.main
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -25,6 +26,7 @@ fun MainScreen() {
         HomeTopAppBar(title = "홈")
         RecognizeText()
         CameraArea()
+        ShotButton()
     }
 }
 
@@ -106,5 +108,15 @@ fun CameraArea() {
             )
     ) {
 
+    }
+}
+
+@Composable
+fun ShotButton() {
+    Button(
+        onClick = {  },
+        modifier = Modifier.padding(top = 20.dp)
+    ) {
+        Text(text = "사진 촬영")
     }
 }
