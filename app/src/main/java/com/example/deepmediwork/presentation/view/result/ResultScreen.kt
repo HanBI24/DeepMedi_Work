@@ -1,4 +1,4 @@
-package com.example.deepmediwork.presentation.view.main
+package com.example.deepmediwork.presentation.view.result
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -19,19 +19,35 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun MainScreen() {
     Column {
-        HomeTopAppBar(title = "홈")
+        ResultTopAppBar(title = "측정 결과")
     }
 }
 
 @Composable
-fun HomeTopAppBar(title: String) {
+fun ResultTopAppBar(title: String) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
     ) {
+        TextButton(
+            onClick = {},
+            modifier = Modifier
+                .padding(top = 36.dp, start = 16.dp, bottom = 20.dp)
+                .align(Alignment.CenterStart),
+        ) {
+            Text(
+                text = "다시 측정",
+                style = TextStyle(
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold
+                ),
+                color = Color.Red
+            )
+        }
         Text(
             modifier = Modifier
-                .padding(top = 36.dp, start = 32.dp, bottom = 20.dp),
+                .padding(top = 36.dp, bottom = 20.dp)
+                .align(Alignment.Center),
             text = title,
             style = TextStyle(
                 fontSize = 20.sp,
