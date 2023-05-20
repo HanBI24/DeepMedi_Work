@@ -10,7 +10,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -19,14 +18,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.deepmediwork.navigation.NavScreen
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    navController: NavHostController
+) {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HomeTopAppBar(title = "홈")
         RecognizeText()
         CameraArea()
-        ShotButton()
+        ShotButton(navController)
     }
 }
 
@@ -112,9 +115,13 @@ fun CameraArea() {
 }
 
 @Composable
-fun ShotButton() {
+fun ShotButton(
+    navController: NavHostController
+) {
     Button(
-        onClick = {  },
+        onClick = {
+            navController.navigate(NavScreen.Result.route)
+        },
         modifier = Modifier.padding(top = 20.dp)
     ) {
         Text(text = "사진 촬영")

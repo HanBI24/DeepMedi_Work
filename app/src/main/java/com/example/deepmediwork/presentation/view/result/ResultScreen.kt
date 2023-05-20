@@ -15,22 +15,31 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 
 @Composable
-fun MainScreen() {
+fun ResultScreen(
+    navController: NavHostController
+) {
     Column {
-        ResultTopAppBar(title = "측정 결과")
+        ResultTopAppBar(
+            title = "측정 결과",
+            navController = navController
+        )
     }
 }
 
 @Composable
-fun ResultTopAppBar(title: String) {
+fun ResultTopAppBar(
+    title: String,
+    navController: NavHostController
+) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
     ) {
         TextButton(
-            onClick = {},
+            onClick = { navController.popBackStack() },
             modifier = Modifier
                 .padding(top = 36.dp, start = 16.dp, bottom = 20.dp)
                 .align(Alignment.CenterStart),
