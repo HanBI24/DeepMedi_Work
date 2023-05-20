@@ -1,15 +1,15 @@
 package com.example.deepmediwork.presentation.view.main
 
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.*
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -24,13 +24,33 @@ fun MainScreen() {
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HomeTopAppBar(title = "홈")
         RecognizeText()
+        CameraArea()
     }
+}
+
+@Composable
+fun HomeTopAppBar(title: String) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+    ) {
+        Text(
+            modifier = Modifier
+                .padding(top = 36.dp, start = 32.dp, bottom = 20.dp),
+            text = title,
+            style = TextStyle(
+                fontSize = 20.sp,
+                fontWeight = FontWeight.Bold
+            )
+        )
+    }
+    Divider(color = Color.LightGray)
 }
 
 @Composable
 fun RecognizeText() {
     Text(
-        modifier = Modifier.padding(top = 52.dp),
+        modifier = Modifier.padding(top = 40.dp),
         text = buildAnnotatedString {
             append("얼굴 인식을 위해\n")
             withStyle(
@@ -53,7 +73,7 @@ fun RecognizeText() {
 @Composable
 fun RecognizeFinishText() {
     Text(
-        modifier = Modifier.padding(top = 52.dp),
+        modifier = Modifier.padding(top = 40.dp),
         text = buildAnnotatedString {
             append("얼굴 인식 ")
             withStyle(
@@ -73,20 +93,18 @@ fun RecognizeFinishText() {
 }
 
 @Composable
-fun HomeTopAppBar(title: String) {
+fun CameraArea() {
     Box(
         modifier = Modifier
-            .fillMaxWidth()
-    ) {
-        Text(
-            modifier = Modifier
-                .padding(top = 36.dp, start = 32.dp, bottom = 20.dp),
-            text = title,
-            style = TextStyle(
-                fontSize = 20.sp,
-                fontWeight = FontWeight.Bold
+            .padding(32.dp)
+            .size(320.dp)
+            .border(
+                BorderStroke(
+                    width = 3.dp,
+                    color = Color.Red
+                )
             )
-        )
+    ) {
+
     }
-    Divider(color = Color.LightGray)
 }
