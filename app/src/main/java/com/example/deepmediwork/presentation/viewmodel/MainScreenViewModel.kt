@@ -1,5 +1,6 @@
 package com.example.deepmediwork.presentation.viewmodel
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.deepmediwork.domain.remote.model.UploadFaceImageItem
@@ -15,14 +16,21 @@ import javax.inject.Inject
 class MainScreenViewModel @Inject constructor(
     private val uploadFaceImageRepository: UploadFaceImageRepository
 ) : ViewModel() {
-    private val _stateCode = MutableStateFlow(UploadFaceImageItem(0, "NULL"))
+    private val _stateCode = MutableStateFlow(UploadFaceImageItem(-1, "NULL"))
     val stateCode = _stateCode.asStateFlow()
 
+    val stateFile = mutableStateOf(File("test"))
+
     fun onUploadFaceImage(file: File) {
+        println("onSuccess ${file.name}")
         viewModelScope.launch {
             _stateCode.value = uploadFaceImageRepository.uploadFaceImage(file)
-            println("onSuccess: ${_stateCode.value.message}")
-            println("onSuccess: ${file.path}")
         }
+        stateFile.value = file
+    }
+
+    fun resetState() {
+        _stateCode.value = UploadFaceImageItem(-1, "NULL")
+        stateFile.value = File("test")
     }
 }

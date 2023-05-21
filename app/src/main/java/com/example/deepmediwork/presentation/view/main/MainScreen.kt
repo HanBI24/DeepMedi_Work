@@ -1,22 +1,15 @@
 package com.example.deepmediwork.presentation.view.main
 
 import android.Manifest
-import android.annotation.SuppressLint
-import android.app.Application
-import android.content.ContentValues
 import android.content.Context
-import android.database.Cursor
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
-import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
-import androidx.camera.core.ImageCapture.FLASH_MODE_ON
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
@@ -37,26 +30,30 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.example.deepmediwork.navigation.NavScreen
 import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalPermissionsApi::class)
+@OptIn(ExperimentalPermissionsApi::class, ExperimentalCoilApi::class)
 @Composable
 fun MainScreen(
     navController: NavHostController
 ) {
     val permissionState = rememberMultiplePermissionsState(
-        permissions = if(Build.VERSION.SDK_INT <= 28) {
+        permissions = if (Build.VERSION.SDK_INT <= 28) {
             listOf(
                 Manifest.permission.CAMERA,
                 Manifest.permission.WRITE_EXTERNAL_STORAGE
@@ -71,10 +68,16 @@ fun MainScreen(
     }
 
     val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
-    val resultStateCode = mainScreenViewModel.stateCode.collectAsState().value.code
+    val resultStateCode =
+        mainScreenViewModel.stateCode.collectAsState().value.code
 
-    if(resultStateCode == 200)
-        navController.navigate(NavScreen.Result.route)
+    if (resultStateCode == 200) {
+        LaunchedEffect(true) {
+            delay(1500)
+            mainScreenViewModel.resetState()
+            navController.navigate(NavScreen.Result.route)
+        }
+    }
 
     val imageCapture = ImageCapture.Builder()
         .setTargetAspectRatio(AspectRatio.RATIO_4_3)
@@ -82,13 +85,10 @@ fun MainScreen(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HomeTopAppBar()
-        RecognizeText()
-        CameraArea(imageCapture)
-        ShotButton(navController, imageCapture, mainScreenViewModel)
+        if (resultStateCode == 200) RecognizeFinishText() else RecognizeText()
+        if (resultStateCode == 200) CameraAreaSuccess(imageCapture) else CameraArea(imageCapture)
+        ShotButton(navController, imageCapture, mainScreenViewModel, resultStateCode)
     }
-
-
-    println("onSuccess: ${mainScreenViewModel.stateCode.collectAsState().value.code}")
 }
 
 @Composable
@@ -182,6 +182,36 @@ fun CameraArea(imageCapture: ImageCapture) {
     }
 }
 
+@Composable
+fun CameraAreaSuccess(imageCapture: ImageCapture) {
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
+    Box(
+        modifier = Modifier
+            .padding(32.dp)
+            .size(320.dp)
+            .border(
+                BorderStroke(
+                    width = 3.dp,
+                    color = Color.Red
+                )
+            )
+    ) {
+        AndroidView(
+            factory = {
+                val previewView = PreviewView(it)
+                showCameraPreview(context, lifecycleOwner, previewView, imageCapture)
+                previewView
+            },
+            modifier = Modifier.fillMaxSize()
+        )
+        Box(
+            modifier = Modifier.fillMaxSize().background(Color.LightGray)
+        )
+    }
+}
+
 private fun showCameraPreview(
     context: Context,
     lifecycleOwner: LifecycleOwner,
@@ -193,11 +223,7 @@ private fun showCameraPreview(
     val imageAnalysis = ImageAnalysis.Builder()
         .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
         .build()
-//    val imageCapture = ImageCapture.Builder()
-//        .setFlashMode(FLASH_MODE_ON)
-//        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-//        .build()
-    val imageSelector = CameraSelector.Builder()
+    val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(CameraSelector.LENS_FACING_BACK)
         .build()
 
@@ -206,7 +232,7 @@ private fun showCameraPreview(
         cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(
             lifecycleOwner,
-            imageSelector,
+            cameraSelector,
             cameraPreview,
             imageAnalysis,
             imageCapture
@@ -220,7 +246,8 @@ private fun showCameraPreview(
 fun ShotButton(
     navController: NavHostController,
     imageCapture: ImageCapture,
-    mainScreenViewModel: MainScreenViewModel
+    mainScreenViewModel: MainScreenViewModel,
+    resultStateCode: Int
 ) {
     val context = LocalContext.current
 
@@ -248,15 +275,15 @@ private fun takePhoto(
         "$name.jpeg"
     )
     val outputOptions = ImageCapture.OutputFileOptions
-        .Builder(
-            photoFile
-        ).build()
+        .Builder(photoFile)
+        .build()
 
     imageCapture.takePicture(
         outputOptions,
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                println("onSuccess saved ${photoFile.name}")
                 mainScreenViewModel.onUploadFaceImage(photoFile)
             }
 
