@@ -2,14 +2,14 @@ package com.example.deepmediwork.presentation.view.main
 
 import android.Manifest
 import android.app.Application
+import android.content.ContentValues
 import android.content.Context
-import androidx.camera.core.AspectRatio
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.ImageAnalysis
+import android.os.Build
+import android.provider.MediaStore
+import android.widget.Toast
+import androidx.camera.core.*
 import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
-import androidx.camera.core.ImageCapture
 import androidx.camera.core.ImageCapture.FLASH_MODE_ON
-import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
@@ -34,11 +34,14 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import com.example.deepmediwork.navigation.NavScreen
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import java.text.SimpleDateFormat
+import java.util.*
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -46,23 +49,29 @@ fun MainScreen(
     navController: NavHostController
 ) {
     val permissionState = rememberMultiplePermissionsState(
-        permissions = listOf(
-            Manifest.permission.CAMERA,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
+        permissions = if(Build.VERSION.SDK_INT <= 28) {
+            listOf(
+                Manifest.permission.CAMERA,
+                Manifest.permission.WRITE_EXTERNAL_STORAGE
+            )
+        } else listOf(Manifest.permission.CAMERA)
     )
 
-    if(!permissionState.allPermissionsGranted) {
+    if (!permissionState.allPermissionsGranted) {
         SideEffect {
             permissionState.launchMultiplePermissionRequest()
         }
     }
 
+    val imageCapture = ImageCapture.Builder()
+        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+        .build()
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HomeTopAppBar()
         RecognizeText()
-        CameraArea()
-        ShotButton(navController)
+        CameraArea(imageCapture)
+        ShotButton(navController, imageCapture)
     }
 }
 
@@ -131,7 +140,7 @@ fun RecognizeFinishText() {
 }
 
 @Composable
-fun CameraArea() {
+fun CameraArea(imageCapture: ImageCapture) {
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
 
@@ -149,7 +158,7 @@ fun CameraArea() {
         AndroidView(
             factory = {
                 val previewView = PreviewView(it)
-                showCameraPreview(context, lifecycleOwner, previewView)
+                showCameraPreview(context, lifecycleOwner, previewView, imageCapture)
                 previewView
             },
             modifier = Modifier.fillMaxSize()
@@ -157,20 +166,21 @@ fun CameraArea() {
     }
 }
 
-fun showCameraPreview(
+private fun showCameraPreview(
     context: Context,
     lifecycleOwner: LifecycleOwner,
-    previewView: PreviewView
+    previewView: PreviewView,
+    imageCapture: ImageCapture
 ) {
     val cameraPreview = Preview.Builder().build()
     val cameraProvider = ProcessCameraProvider.getInstance(context).get()
     val imageAnalysis = ImageAnalysis.Builder()
         .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
         .build()
-    val imageCapture = ImageCapture.Builder()
-        .setFlashMode(FLASH_MODE_ON)
-        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
-        .build()
+//    val imageCapture = ImageCapture.Builder()
+//        .setFlashMode(FLASH_MODE_ON)
+//        .setTargetAspectRatio(AspectRatio.RATIO_4_3)
+//        .build()
     val imageSelector = CameraSelector.Builder()
         .requireLensFacing(CameraSelector.LENS_FACING_BACK)
         .build()
@@ -185,21 +195,62 @@ fun showCameraPreview(
             imageAnalysis,
             imageCapture
         )
-    } catch(e: Exception) {
+    } catch (e: Exception) {
         e.printStackTrace()
     }
 }
 
 @Composable
 fun ShotButton(
-    navController: NavHostController
+    navController: NavHostController,
+    imageCapture: ImageCapture
 ) {
+    val context = LocalContext.current
+
     Button(
         onClick = {
-            navController.navigate(NavScreen.Result.route)
+//            navController.navigate(NavScreen.Result.route)
+            takePhoto(context, imageCapture)
         },
         modifier = Modifier.padding(top = 20.dp)
     ) {
         Text(text = "사진 촬영")
     }
+}
+
+private fun takePhoto(
+    context: Context,
+    imageCapture: ImageCapture
+) {
+    val name = SimpleDateFormat(
+        "yyyy-MM-dd-HH-mm-ss-SSS",
+        Locale.KOREAN
+    ).format(System.currentTimeMillis())
+    val contentValues = ContentValues().apply {
+        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
+        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
+        if(Build.VERSION.SDK_INT > 28) {
+            put(MediaStore.Images.Media.RELATIVE_PATH,"Pictures/DeepMedi")
+        }
+    }
+    val outputOptions = ImageCapture.OutputFileOptions
+        .Builder(
+            context.contentResolver,
+            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+            contentValues
+        ).build()
+
+    imageCapture.takePicture(
+        outputOptions,
+        ContextCompat.getMainExecutor(context),
+        object : ImageCapture.OnImageSavedCallback {
+            override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
+                println("onSuccess: ${outputFileResults.savedUri}")
+            }
+
+            override fun onError(exception: ImageCaptureException) {
+                println("onError: $exception")
+            }
+        }
+    )
 }
