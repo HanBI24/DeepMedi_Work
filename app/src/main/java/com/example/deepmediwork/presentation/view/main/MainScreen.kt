@@ -22,9 +22,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
-import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -73,6 +71,10 @@ fun MainScreen(
     }
 
     val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+    val resultStateCode = mainScreenViewModel.stateCode.collectAsState().value.code
+
+    if(resultStateCode == 200)
+        navController.navigate(NavScreen.Result.route)
 
     val imageCapture = ImageCapture.Builder()
         .setTargetAspectRatio(AspectRatio.RATIO_4_3)
@@ -224,7 +226,6 @@ fun ShotButton(
 
     Button(
         onClick = {
-//            navController.navigate(NavScreen.Result.route)
             takePhoto(context, imageCapture, mainScreenViewModel)
         },
         modifier = Modifier.padding(top = 20.dp)
