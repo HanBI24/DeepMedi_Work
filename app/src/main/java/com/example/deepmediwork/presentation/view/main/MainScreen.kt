@@ -1,9 +1,13 @@
 package com.example.deepmediwork.presentation.view.main
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Application
 import android.content.ContentValues
 import android.content.Context
+import android.database.Cursor
+import android.graphics.BitmapFactory
+import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.widget.Toast
@@ -20,6 +24,7 @@ import androidx.compose.material.Divider
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,12 +39,16 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import com.example.deepmediwork.navigation.NavScreen
+import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,6 +72,8 @@ fun MainScreen(
         }
     }
 
+    val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
+
     val imageCapture = ImageCapture.Builder()
         .setTargetAspectRatio(AspectRatio.RATIO_4_3)
         .build()
@@ -71,8 +82,11 @@ fun MainScreen(
         HomeTopAppBar()
         RecognizeText()
         CameraArea(imageCapture)
-        ShotButton(navController, imageCapture)
+        ShotButton(navController, imageCapture, mainScreenViewModel)
     }
+
+
+    println("onSuccess: ${mainScreenViewModel.stateCode.collectAsState().value.code}")
 }
 
 @Composable
@@ -203,14 +217,15 @@ private fun showCameraPreview(
 @Composable
 fun ShotButton(
     navController: NavHostController,
-    imageCapture: ImageCapture
+    imageCapture: ImageCapture,
+    mainScreenViewModel: MainScreenViewModel
 ) {
     val context = LocalContext.current
 
     Button(
         onClick = {
 //            navController.navigate(NavScreen.Result.route)
-            takePhoto(context, imageCapture)
+            takePhoto(context, imageCapture, mainScreenViewModel)
         },
         modifier = Modifier.padding(top = 20.dp)
     ) {
@@ -220,24 +235,20 @@ fun ShotButton(
 
 private fun takePhoto(
     context: Context,
-    imageCapture: ImageCapture
+    imageCapture: ImageCapture,
+    mainScreenViewModel: MainScreenViewModel
 ) {
     val name = SimpleDateFormat(
         "yyyy-MM-dd-HH-mm-ss-SSS",
         Locale.KOREAN
     ).format(System.currentTimeMillis())
-    val contentValues = ContentValues().apply {
-        put(MediaStore.MediaColumns.DISPLAY_NAME, name)
-        put(MediaStore.MediaColumns.MIME_TYPE, "image/jpeg")
-        if(Build.VERSION.SDK_INT > 28) {
-            put(MediaStore.Images.Media.RELATIVE_PATH,"Pictures/DeepMedi")
-        }
-    }
+    val photoFile = File(
+        context.cacheDir,
+        "$name.jpeg"
+    )
     val outputOptions = ImageCapture.OutputFileOptions
         .Builder(
-            context.contentResolver,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-            contentValues
+            photoFile
         ).build()
 
     imageCapture.takePicture(
@@ -245,7 +256,7 @@ private fun takePhoto(
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
-                println("onSuccess: ${outputFileResults.savedUri}")
+                mainScreenViewModel.onUploadFaceImage(photoFile)
             }
 
             override fun onError(exception: ImageCaptureException) {
