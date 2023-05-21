@@ -99,7 +99,7 @@ fun HomeTopAppBar() {
     ) {
         Text(
             modifier = Modifier
-                .padding(top = 36.dp, start = 32.dp, bottom = 20.dp),
+                .padding(top = 16.dp, start = 32.dp, bottom = 20.dp),
             text = "홈",
             style = TextStyle(
                 fontSize = 20.sp,

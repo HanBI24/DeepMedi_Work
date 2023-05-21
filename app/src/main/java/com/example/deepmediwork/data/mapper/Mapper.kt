@@ -1,4 +1,4 @@
-package com.example.deepmediwork.data.remote.mapper
+package com.example.deepmediwork.data.mapper
 
 import com.example.deepmediwork.data.remote.dto.upload.UploadFaceImageDto
 import com.example.deepmediwork.data.remote.dto.user_info.UserInfoDto

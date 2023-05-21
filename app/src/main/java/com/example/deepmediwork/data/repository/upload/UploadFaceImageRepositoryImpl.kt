@@ -2,7 +2,7 @@ package com.example.deepmediwork.data.repository.upload
 
 import com.example.deepmediwork.data.remote.api.DeepMediApi
 import com.example.deepmediwork.data.remote.dto.upload.UploadFaceImageDto
-import com.example.deepmediwork.data.remote.mapper.Mapper.toUploadFaceImageItem
+import com.example.deepmediwork.data.mapper.Mapper.toUploadFaceImageItem
 import com.example.deepmediwork.domain.remote.model.upload.UploadFaceImageItem
 import com.example.deepmediwork.domain.remote.repository.upload.UploadFaceImageRepository
 import kotlinx.coroutines.Dispatchers
