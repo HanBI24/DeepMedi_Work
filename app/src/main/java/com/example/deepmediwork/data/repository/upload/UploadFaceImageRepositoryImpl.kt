@@ -1,16 +1,13 @@
-package com.example.deepmediwork.data.repository
+package com.example.deepmediwork.data.repository.upload
 
 import com.example.deepmediwork.data.remote.api.DeepMediApi
-import com.example.deepmediwork.data.remote.dto.UploadFaceImageDto
+import com.example.deepmediwork.data.remote.dto.upload.UploadFaceImageDto
 import com.example.deepmediwork.data.remote.mapper.Mapper.toUploadFaceImageItem
-import com.example.deepmediwork.domain.remote.model.UploadFaceImageItem
-import com.example.deepmediwork.domain.remote.repository.UploadFaceImageRepository
+import com.example.deepmediwork.domain.remote.model.upload.UploadFaceImageItem
+import com.example.deepmediwork.domain.remote.repository.upload.UploadFaceImageRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import okhttp3.MediaType
-import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import java.io.File
 import javax.inject.Inject

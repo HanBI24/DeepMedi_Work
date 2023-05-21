@@ -15,16 +15,22 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
+import com.example.deepmediwork.presentation.viewmodel.ResultScreenViewModel
 
 @Composable
 fun ResultScreen(
     navController: NavHostController
 ) {
+    val resultScreenViewModel: ResultScreenViewModel = hiltViewModel()
+    val k = resultScreenViewModel.userInfoState
+
     Column {
         ResultTopAppBar(
             navController = navController
         )
+        Text(k.value.toString())
     }
 }
 

@@ -69,7 +69,7 @@ fun MainScreen(
 
     val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
     val resultStateCode =
-        mainScreenViewModel.stateCode.collectAsState().value.code
+        mainScreenViewModel.stateCode.value.code
 
     if (resultStateCode == 200) {
         LaunchedEffect(true) {
