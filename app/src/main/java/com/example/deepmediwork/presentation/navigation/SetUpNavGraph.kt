@@ -12,7 +12,7 @@ import com.example.deepmediwork.presentation.view.result.ResultScreen
 fun SetUpNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = NavScreen.Result.route
+        startDestination = NavScreen.Home.route
     ) {
         composable(route = NavScreen.Home.route) {
             MainScreen(navController)

@@ -14,7 +14,10 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
+import androidx.compose.material.Icon
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -198,17 +201,23 @@ fun CameraAreaSuccess(imageCapture: ImageCapture) {
                 )
             )
     ) {
-        AndroidView(
-            factory = {
-                val previewView = PreviewView(it)
-                showCameraPreview(context, lifecycleOwner, previewView, imageCapture)
-                previewView
-            },
-            modifier = Modifier.fillMaxSize()
-        )
         Box(
-            modifier = Modifier.fillMaxSize().background(Color.LightGray)
-        )
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Green)
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    modifier = Modifier.fillMaxSize().padding(100.dp),
+                    imageVector = Icons.Default.Check,
+                    contentDescription = "Success Icon",
+                    tint = Color.White
+                )
+            }
+        }
     }
 }
 
@@ -220,21 +229,18 @@ private fun showCameraPreview(
 ) {
     val cameraPreview = Preview.Builder().build()
     val cameraProvider = ProcessCameraProvider.getInstance(context).get()
-    val imageAnalysis = ImageAnalysis.Builder()
-        .setBackpressureStrategy(STRATEGY_KEEP_ONLY_LATEST)
-        .build()
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(CameraSelector.LENS_FACING_BACK)
         .build()
 
     cameraPreview.setSurfaceProvider(previewView.surfaceProvider)
+
     try {
         cameraProvider.unbindAll()
         cameraProvider.bindToLifecycle(
             lifecycleOwner,
             cameraSelector,
             cameraPreview,
-            imageAnalysis,
             imageCapture
         )
     } catch (e: Exception) {
