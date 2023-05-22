@@ -121,6 +121,7 @@ fun DefaultUserInfo(
                 contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .size(120.dp)
+                    .aspectRatio(1f)
                     .clip(CircleShape)
             )
             Column(
@@ -189,7 +190,7 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
     )
     val userInfoList = listOf(
         userInfo.bpm,
-        if (userInfo.sys > userInfo.dia) userInfo.sys else userInfo.dia,
+        "${userInfo.sys}/${userInfo.dia}",
         userInfo.resp,
         userInfo.fatigue,
         userInfo.stress,
@@ -199,7 +200,7 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
     )
     val textBackList = listOf(
         "회/분",
-        "/66",
+        "",
         "회/분",
         "",
         "",
@@ -253,12 +254,72 @@ fun RoundedHealthCheck(
     userInfo: Any,
     index: Int
 ) {
+    val userInfoString = userInfo.toString()
     when (index) {
         0 -> {
-            when (userInfo.toString().toInt()) {
+            when (userInfoString.toInt()) {
                 in 60..80 -> RoundedHealthShapeNormal()
                 in 81..100 -> RoundedHealthShapeCare()
                 in 101..150 -> RoundedHealthShapeWarn()
+                else -> RoundedHealthShapeDanger()
+            }
+        }
+        1 -> {
+            val sysDia = userInfoString.split('/')
+
+            val sysData = sysDia[0].toInt()
+            val diaData = sysDia[1].toInt()
+
+            val sysResult = when(sysData) {
+                in 100..120 -> 1
+                in 121..140 -> 2
+                in 141..160 -> 3
+                else -> 4
+            }
+            val diaResult = when(diaData) {
+                in 50..70 -> 1
+                in 71..90 -> 2
+                in 91..110 -> 3
+                else -> 4
+            }
+
+            if(sysResult > diaResult) {
+                when(sysResult) {
+                    1 -> RoundedHealthShapeNormal()
+                    2 -> RoundedHealthShapeCare()
+                    3 -> RoundedHealthShapeWarn()
+                    4 -> RoundedHealthShapeDanger()
+                }
+            } else {
+                when(diaResult) {
+                    1 -> RoundedHealthShapeNormal()
+                    2 -> RoundedHealthShapeCare()
+                    3 -> RoundedHealthShapeWarn()
+                    4 -> RoundedHealthShapeDanger()
+                }
+            }
+        }
+        2 -> {
+            when(userInfoString.toInt()) {
+                in 1..8 -> RoundedHealthShapeNormal()
+                in 9..12 -> RoundedHealthShapeCare()
+                in 13..16 -> RoundedHealthShapeWarn()
+                else -> RoundedHealthShapeDanger()
+            }
+        }
+        3 -> {
+            when(userInfoString.toInt()) {
+                in 60..80 -> RoundedHealthShapeNormal()
+                in 81..100 -> RoundedHealthShapeCare()
+                in 101..150 -> RoundedHealthShapeWarn()
+                else -> RoundedHealthShapeDanger()
+            }
+        }
+        4 -> {
+            when(userInfoString.toInt()) {
+                in 0..1 -> RoundedHealthShapeNormal()
+                2 -> RoundedHealthShapeCare()
+                in 3..4 -> RoundedHealthShapeWarn()
                 else -> RoundedHealthShapeDanger()
             }
         }
@@ -270,10 +331,10 @@ fun RoundedHealthShapeNormal() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Green)
+            .background(Color.Green, shape = CircleShape),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Center),
             text = "정상",
             style = TextStyle(
                 fontSize = 12.sp,
@@ -289,10 +350,10 @@ fun RoundedHealthShapeCare() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Yellow)
+            .background(Color.Yellow, shape = CircleShape),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Center),
             text = "주의",
             style = TextStyle(
                 fontSize = 12.sp,
@@ -308,10 +369,10 @@ fun RoundedHealthShapeWarn() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Cyan)
+            .background(Color.Cyan, shape = CircleShape),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Center),
             text = "경고",
             style = TextStyle(
                 fontSize = 12.sp,
@@ -327,10 +388,10 @@ fun RoundedHealthShapeDanger() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Red)
+            .background(Color.Red, shape = CircleShape),
+        contentAlignment = Alignment.Center
     ) {
         Text(
-            modifier = Modifier.align(Alignment.Center),
             text = "위험",
             style = TextStyle(
                 fontSize = 12.sp,
