@@ -4,11 +4,9 @@ import android.Manifest
 import android.content.Context
 import android.os.Build
 import androidx.camera.core.*
-import androidx.camera.core.ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -38,14 +36,11 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import com.example.deepmediwork.navigation.NavScreen
 import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -71,8 +66,7 @@ fun MainScreen(
     }
 
     val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
-    val resultStateCode =
-        mainScreenViewModel.stateCode.value.code
+    val resultStateCode = mainScreenViewModel.stateCode.value.code
 
     if (resultStateCode == 200) {
         LaunchedEffect(true) {
@@ -86,11 +80,18 @@ fun MainScreen(
         .setTargetAspectRatio(AspectRatio.RATIO_4_3)
         .build()
 
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val context = LocalContext.current
+
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HomeTopAppBar()
         if (resultStateCode == 200) RecognizeFinishText() else RecognizeText()
-        if (resultStateCode == 200) CameraAreaSuccess(imageCapture) else CameraArea(imageCapture)
-        ShotButton(navController, imageCapture, mainScreenViewModel, resultStateCode)
+        if (resultStateCode == 200) CameraAreaSuccess() else CameraArea(
+            imageCapture,
+            context,
+            lifecycleOwner
+        )
+        ShotButton(imageCapture, mainScreenViewModel, context)
     }
 }
 
@@ -159,9 +160,14 @@ fun RecognizeFinishText() {
 }
 
 @Composable
-fun CameraArea(imageCapture: ImageCapture) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
+fun CameraArea(
+    imageCapture: ImageCapture,
+    context: Context,
+    lifecycleOwner: LifecycleOwner
+) {
+    val previewView = remember { PreviewView(context) }
+
+    ShowCameraPreview(context, lifecycleOwner, previewView, imageCapture)
 
     Box(
         modifier = Modifier
@@ -176,8 +182,6 @@ fun CameraArea(imageCapture: ImageCapture) {
     ) {
         AndroidView(
             factory = {
-                val previewView = PreviewView(it)
-                showCameraPreview(context, lifecycleOwner, previewView, imageCapture)
                 previewView
             },
             modifier = Modifier.fillMaxSize()
@@ -186,10 +190,7 @@ fun CameraArea(imageCapture: ImageCapture) {
 }
 
 @Composable
-fun CameraAreaSuccess(imageCapture: ImageCapture) {
-    val lifecycleOwner = LocalLifecycleOwner.current
-    val context = LocalContext.current
-
+fun CameraAreaSuccess() {
     Box(
         modifier = Modifier
             .padding(32.dp)
@@ -211,7 +212,9 @@ fun CameraAreaSuccess(imageCapture: ImageCapture) {
                 contentAlignment = Alignment.Center
             ) {
                 Icon(
-                    modifier = Modifier.fillMaxSize().padding(100.dp),
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(100.dp),
                     imageVector = Icons.Default.Check,
                     contentDescription = "Success Icon",
                     tint = Color.White
@@ -221,7 +224,8 @@ fun CameraAreaSuccess(imageCapture: ImageCapture) {
     }
 }
 
-private fun showCameraPreview(
+@Composable
+private fun ShowCameraPreview(
     context: Context,
     lifecycleOwner: LifecycleOwner,
     previewView: PreviewView,
@@ -244,18 +248,16 @@ private fun showCameraPreview(
             imageCapture
         )
     } catch (e: Exception) {
-        e.printStackTrace()
+        println("onError Provider: $e")
     }
 }
 
 @Composable
 fun ShotButton(
-    navController: NavHostController,
     imageCapture: ImageCapture,
     mainScreenViewModel: MainScreenViewModel,
-    resultStateCode: Int
+    context: Context
 ) {
-    val context = LocalContext.current
 
     Button(
         onClick = {
@@ -294,7 +296,7 @@ private fun takePhoto(
             }
 
             override fun onError(exception: ImageCaptureException) {
-                println("onError: $exception")
+                println("onError Saved: $exception")
             }
         }
     )
