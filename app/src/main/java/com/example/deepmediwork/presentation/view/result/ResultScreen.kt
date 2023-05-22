@@ -2,6 +2,7 @@ package com.example.deepmediwork.presentation.view.result
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -19,12 +20,10 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.deepmediwork.domain.remote.model.user_info.UserInfoItem
-import com.example.deepmediwork.presentation.viewmodel.ResultScreenViewModel
 
 @Composable
 fun ResultScreen(
@@ -216,6 +215,7 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(130.dp)
+                        .border(width = 0.3.dp, color = Color(0xFFD8D8D8))
                         .background(color = Color(0xFFFDF5F6)),
                 ) {
                     Column(
