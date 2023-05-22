@@ -22,18 +22,13 @@ class MainScreenViewModel @Inject constructor(
     private val _stateCode = mutableStateOf(UploadFaceImageItem(-1, "NULL"))
     val stateCode: State<UploadFaceImageItem> = _stateCode
 
-    val stateFile = mutableStateOf(File("test"))
-
     fun onUploadFaceImage(file: File) {
-        println("onSuccess ${file.name}")
         viewModelScope.launch {
             _stateCode.value = uploadFaceImageRepository.uploadFaceImage(file)
         }
-        stateFile.value = file
     }
 
     fun resetState() {
         _stateCode.value = UploadFaceImageItem(-1, "NULL")
-        stateFile.value = File("test")
     }
 }

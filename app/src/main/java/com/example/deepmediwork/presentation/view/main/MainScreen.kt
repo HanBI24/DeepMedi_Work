@@ -7,6 +7,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -34,8 +35,10 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
 import com.example.deepmediwork.navigation.NavScreen
 import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -85,12 +88,10 @@ fun MainScreen(
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         HomeTopAppBar()
-        if (resultStateCode == 200) RecognizeFinishText() else RecognizeText()
-        if (resultStateCode == 200) CameraAreaSuccess() else CameraArea(
-            imageCapture,
-            context,
-            lifecycleOwner
-        )
+        if (resultStateCode == 200) RecognizeFinishText()
+        else RecognizeText()
+        if (resultStateCode == 200) CameraAreaSuccess()
+        else CameraArea(imageCapture, context, lifecycleOwner)
         ShotButton(imageCapture, mainScreenViewModel, context)
     }
 }
