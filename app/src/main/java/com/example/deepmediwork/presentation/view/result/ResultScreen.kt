@@ -28,11 +28,9 @@ import com.example.deepmediwork.presentation.viewmodel.ResultScreenViewModel
 
 @Composable
 fun ResultScreen(
-    navController: NavHostController
+    navController: NavHostController,
+    userInfo: UserInfoItem
 ) {
-    val resultScreenViewModel: ResultScreenViewModel = hiltViewModel()
-    val userInfo = resultScreenViewModel.userInfoState.value
-
     Column {
         ResultTopAppBar(navController = navController)
         DefaultInfoText()
@@ -241,175 +239,10 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
                                 fontWeight = FontWeight.SemiBold
                             ),
                         )
-                        RoundedHealthCheck(userInfoList[index], index)
+                        CheckUserHealthInfo(userInfoList[index], index)
                     }
                 }
             }
         }
     )
-}
-
-@Composable
-fun RoundedHealthCheck(
-    userInfo: Any,
-    index: Int
-) {
-    val userInfoString = userInfo.toString()
-    when (index) {
-        0 -> {
-            when (userInfoString.toInt()) {
-                in 60..80 -> RoundedHealthShapeNormal()
-                in 81..100 -> RoundedHealthShapeCare()
-                in 101..150 -> RoundedHealthShapeWarn()
-                else -> RoundedHealthShapeDanger()
-            }
-        }
-        1 -> {
-            val sysDia = userInfoString.split('/')
-
-            val sysData = sysDia[0].toInt()
-            val diaData = sysDia[1].toInt()
-
-            val sysResult = when (sysData) {
-                in 100..120 -> 1
-                in 121..140 -> 2
-                in 141..160 -> 3
-                else -> 4
-            }
-            val diaResult = when (diaData) {
-                in 50..70 -> 1
-                in 71..90 -> 2
-                in 91..110 -> 3
-                else -> 4
-            }
-
-            if (sysResult > diaResult) {
-                when (sysResult) {
-                    1 -> RoundedHealthShapeNormal()
-                    2 -> RoundedHealthShapeCare()
-                    3 -> RoundedHealthShapeWarn()
-                    4 -> RoundedHealthShapeDanger()
-                }
-            } else {
-                when (diaResult) {
-                    1 -> RoundedHealthShapeNormal()
-                    2 -> RoundedHealthShapeCare()
-                    3 -> RoundedHealthShapeWarn()
-                    4 -> RoundedHealthShapeDanger()
-                }
-            }
-        }
-        2 -> {
-            when (userInfoString.toInt()) {
-                in 1..8 -> RoundedHealthShapeNormal()
-                in 9..12 -> RoundedHealthShapeCare()
-                in 13..16 -> RoundedHealthShapeWarn()
-                else -> RoundedHealthShapeDanger()
-            }
-        }
-        3 -> {
-            when (userInfoString.toInt()) {
-                in 60..80 -> RoundedHealthShapeNormal()
-                in 81..100 -> RoundedHealthShapeCare()
-                in 101..150 -> RoundedHealthShapeWarn()
-                else -> RoundedHealthShapeDanger()
-            }
-        }
-        4 -> {
-            when (userInfoString.toInt()) {
-                in 0..1 -> RoundedHealthShapeNormal()
-                2 -> RoundedHealthShapeCare()
-                in 3..4 -> RoundedHealthShapeWarn()
-                else -> RoundedHealthShapeDanger()
-            }
-        }
-    }
-}
-
-@Composable
-fun RoundedHealthShapeNormal() {
-    Box(
-        modifier = Modifier
-            .size(40.dp, 20.dp)
-            .background(
-                color = Color(0xFF66B300),
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "정상",
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = Color.White
-        )
-    }
-}
-
-@Composable
-fun RoundedHealthShapeCare() {
-    Box(
-        modifier = Modifier
-            .size(40.dp, 20.dp)
-            .background(
-                color = Color(0xFFFFD000),
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "주의",
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = Color.White
-        )
-    }
-}
-
-@Composable
-fun RoundedHealthShapeWarn() {
-    Box(
-        modifier = Modifier
-            .size(40.dp, 20.dp)
-            .background(
-                color = Color(0xFFFF6C00),
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "경고",
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = Color.White
-        )
-    }
-}
-
-@Composable
-fun RoundedHealthShapeDanger() {
-    Box(
-        modifier = Modifier
-            .size(40.dp, 20.dp)
-            .background(
-                color = Color(0xFFDF0000),
-                shape = CircleShape
-            ),
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            text = "위험",
-            style = TextStyle(
-                fontSize = 12.sp,
-                fontWeight = FontWeight.SemiBold
-            ),
-            color = Color.White
-        )
-    }
 }
