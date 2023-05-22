@@ -24,6 +24,5 @@ class UploadFaceImageRepositoryImpl @Inject constructor(
                 file.asRequestBody()
             )
         ).toUploadFaceImageItem()
-
     }
 }

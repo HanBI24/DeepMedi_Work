@@ -39,7 +39,7 @@ fun ResultScreen(
         DefaultUserInfo(userInfo = userInfo)
         Divider(
             modifier = Modifier.padding(top = 32.dp, start = 20.dp, end = 20.dp),
-            color = Color.LightGray
+            color = Color(0xFFD8D8D8)
         )
         HealthStateInfoText()
         UserHealthInfoLazyGrid(userInfo)
@@ -66,7 +66,7 @@ fun ResultTopAppBar(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = Color.Red
+                color = Color(0xFFD03843)
             )
         }
         Text(
@@ -80,7 +80,7 @@ fun ResultTopAppBar(
             )
         )
     }
-    Divider(color = Color.LightGray)
+    Divider(color = Color(0xFFD8D8D8))
 }
 
 @Composable
@@ -95,7 +95,7 @@ fun DefaultInfoText() {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             ),
-            color = Color.Red
+            color = Color(0xFFD03843)
         )
     }
 }
@@ -163,7 +163,7 @@ fun HealthStateInfoText() {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             ),
-            color = Color.Red
+            color = Color(0xFFD03843)
         )
         Text(
             modifier = Modifier.padding(top = 20.dp),
@@ -218,7 +218,7 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(130.dp)
-                        .background(Color.LightGray),
+                        .background(color = Color(0xFFFDF5F6)),
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),
@@ -270,28 +270,28 @@ fun RoundedHealthCheck(
             val sysData = sysDia[0].toInt()
             val diaData = sysDia[1].toInt()
 
-            val sysResult = when(sysData) {
+            val sysResult = when (sysData) {
                 in 100..120 -> 1
                 in 121..140 -> 2
                 in 141..160 -> 3
                 else -> 4
             }
-            val diaResult = when(diaData) {
+            val diaResult = when (diaData) {
                 in 50..70 -> 1
                 in 71..90 -> 2
                 in 91..110 -> 3
                 else -> 4
             }
 
-            if(sysResult > diaResult) {
-                when(sysResult) {
+            if (sysResult > diaResult) {
+                when (sysResult) {
                     1 -> RoundedHealthShapeNormal()
                     2 -> RoundedHealthShapeCare()
                     3 -> RoundedHealthShapeWarn()
                     4 -> RoundedHealthShapeDanger()
                 }
             } else {
-                when(diaResult) {
+                when (diaResult) {
                     1 -> RoundedHealthShapeNormal()
                     2 -> RoundedHealthShapeCare()
                     3 -> RoundedHealthShapeWarn()
@@ -300,7 +300,7 @@ fun RoundedHealthCheck(
             }
         }
         2 -> {
-            when(userInfoString.toInt()) {
+            when (userInfoString.toInt()) {
                 in 1..8 -> RoundedHealthShapeNormal()
                 in 9..12 -> RoundedHealthShapeCare()
                 in 13..16 -> RoundedHealthShapeWarn()
@@ -308,7 +308,7 @@ fun RoundedHealthCheck(
             }
         }
         3 -> {
-            when(userInfoString.toInt()) {
+            when (userInfoString.toInt()) {
                 in 60..80 -> RoundedHealthShapeNormal()
                 in 81..100 -> RoundedHealthShapeCare()
                 in 101..150 -> RoundedHealthShapeWarn()
@@ -316,7 +316,7 @@ fun RoundedHealthCheck(
             }
         }
         4 -> {
-            when(userInfoString.toInt()) {
+            when (userInfoString.toInt()) {
                 in 0..1 -> RoundedHealthShapeNormal()
                 2 -> RoundedHealthShapeCare()
                 in 3..4 -> RoundedHealthShapeWarn()
@@ -331,7 +331,10 @@ fun RoundedHealthShapeNormal() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Green, shape = CircleShape),
+            .background(
+                color = Color(0xFF66B300),
+                shape = CircleShape
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -350,7 +353,10 @@ fun RoundedHealthShapeCare() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Yellow, shape = CircleShape),
+            .background(
+                color = Color(0xFFFFD000),
+                shape = CircleShape
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -369,7 +375,10 @@ fun RoundedHealthShapeWarn() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Cyan, shape = CircleShape),
+            .background(
+                color = Color(0xFFFF6C00),
+                shape = CircleShape
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(
@@ -388,7 +397,10 @@ fun RoundedHealthShapeDanger() {
     Box(
         modifier = Modifier
             .size(40.dp, 20.dp)
-            .background(Color.Red, shape = CircleShape),
+            .background(
+                color = Color(0xFFDF0000),
+                shape = CircleShape
+            ),
         contentAlignment = Alignment.Center
     ) {
         Text(

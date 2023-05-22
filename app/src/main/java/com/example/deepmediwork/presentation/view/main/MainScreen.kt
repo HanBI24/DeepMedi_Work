@@ -7,7 +7,6 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -35,10 +34,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
-import coil.annotation.ExperimentalCoilApi
-import coil.compose.rememberImagePainter
 import com.example.deepmediwork.navigation.NavScreen
 import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
@@ -112,7 +108,7 @@ fun HomeTopAppBar() {
             )
         )
     }
-    Divider(color = Color.LightGray)
+    Divider(color = Color(0xFFD8D8D8))
 }
 
 @Composable
@@ -123,7 +119,7 @@ fun RecognizeText() {
             append("얼굴 인식을 위해\n")
             withStyle(
                 style = SpanStyle(
-                    color = Color.Red
+                    color = Color(0xFFD03843)
                 )
             ) {
                 append("화면을 응시")
@@ -146,7 +142,7 @@ fun RecognizeFinishText() {
             append("얼굴 인식 ")
             withStyle(
                 style = SpanStyle(
-                    color = Color.Red
+                    color =Color(0xFFD03843)
                 )
             ) {
                 append("성공")
@@ -177,7 +173,7 @@ fun CameraArea(
             .border(
                 BorderStroke(
                     width = 3.dp,
-                    color = Color.Red
+                    color = Color(0xFFD03843)
                 )
             )
     ) {
@@ -199,14 +195,14 @@ fun CameraAreaSuccess() {
             .border(
                 BorderStroke(
                     width = 3.dp,
-                    color = Color.Red
+                    color = Color(0xFFD03843)
                 )
             )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(Color.Green)
+                .background(color = Color(0xFFD9FFEC))
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
