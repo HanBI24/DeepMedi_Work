@@ -5,6 +5,7 @@ import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
@@ -20,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.SpanStyle
@@ -34,6 +36,9 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
+import coil.annotation.ExperimentalCoilApi
+import coil.compose.rememberImagePainter
+import com.example.deepmediwork.R
 import com.example.deepmediwork.navigation.NavScreen
 import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
 import kotlinx.coroutines.delay
@@ -41,6 +46,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
+@OptIn(ExperimentalCoilApi::class)
 @Composable
 fun MainScreen(
     navController: NavHostController,
@@ -70,6 +76,11 @@ fun MainScreen(
         if (resultStateCode == 200) CameraAreaSuccess()
         else CameraArea(context, lifecycleOwner, imageCapture, previewView)
         ShotButton(imageCapture, mainScreenViewModel, context)
+        Image(
+            rememberImagePainter(R.drawable.step_indicator),
+            modifier = Modifier.size(350.dp),
+            contentDescription = "Step Image Indicator"
+        )
     }
 }
 

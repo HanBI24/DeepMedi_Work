@@ -36,7 +36,7 @@ fun ResultScreen(
         DefaultInfoText()
         DefaultUserInfo(userInfo = userInfo)
         Divider(
-            modifier = Modifier.padding(top = 32.dp, start = 20.dp, end = 20.dp),
+            modifier = Modifier.padding(top = 16.dp, start = 20.dp, end = 20.dp),
             color = Color(0xFFD8D8D8)
         )
         HealthStateInfoText()
