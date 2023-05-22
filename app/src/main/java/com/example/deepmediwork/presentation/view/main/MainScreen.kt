@@ -48,7 +48,7 @@ import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
-@OptIn(ExperimentalPermissionsApi::class, ExperimentalCoilApi::class)
+@OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MainScreen(
     navController: NavHostController

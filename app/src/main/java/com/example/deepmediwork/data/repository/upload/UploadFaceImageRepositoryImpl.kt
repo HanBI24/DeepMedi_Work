@@ -17,18 +17,13 @@ class UploadFaceImageRepositoryImpl @Inject constructor(
 ) : UploadFaceImageRepository {
 
     override suspend fun uploadFaceImage(file: File): UploadFaceImageItem {
-        return withContext(Dispatchers.IO) {
-            return@withContext try {
-                deepMediApi.uploadFaceImage(
-                    MultipartBody.Part.createFormData(
-                        "file",
-                        file.name,
-                        file.asRequestBody()
-                    )
-                ).toUploadFaceImageItem()
-            } catch (e: Exception) {
-                UploadFaceImageDto(-1, e.toString()).toUploadFaceImageItem()
-            }
-        }
+        return deepMediApi.uploadFaceImage(
+            MultipartBody.Part.createFormData(
+                "file",
+                file.name,
+                file.asRequestBody()
+            )
+        ).toUploadFaceImageItem()
+
     }
 }
