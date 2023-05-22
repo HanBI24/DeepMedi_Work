@@ -4,11 +4,9 @@ import android.content.Context
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Button
 import androidx.compose.material.Divider
 import androidx.compose.material.Icon
@@ -154,13 +152,21 @@ fun ShotButton(
     mainScreenViewModel: MainScreenViewModel,
     context: Context
 ) {
-    Button(
-        onClick = {
-            takePhoto(context, imageCapture, mainScreenViewModel)
-        },
-        modifier = Modifier.padding(top = 20.dp)
+    Box(
+        modifier = Modifier
+            .size(80.dp)
+            .background(color = Color(0xFFD03843), shape = CircleShape)
+            .clickable {
+                takePhoto(context, imageCapture, mainScreenViewModel)
+            },
+        contentAlignment = Alignment.Center
     ) {
-        Text(text = "사진 촬영")
+        Box(
+            modifier = Modifier
+                .size(70.dp)
+                .background(color = Color(0xFFD03843), shape = CircleShape)
+                .border(width = 4.dp, color = Color.White, shape = CircleShape)
+        )
     }
 }
 
