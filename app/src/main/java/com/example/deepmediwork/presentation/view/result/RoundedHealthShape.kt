@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.deepmediwork.ui.theme.DeepMediColor
 
+// 사용자 수치에 따른 정상, 주의, 경고, 위험도 뱃지
 @Composable
 fun RoundedHealthShapeNormal() {
     Box(

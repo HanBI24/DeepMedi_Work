@@ -38,6 +38,7 @@ fun CameraArea(
     imageCapture: ImageCapture,
     previewView: PreviewView
 ) {
+    // 카메라 뷰 설정
     ShowCameraPreview(context, lifecycleOwner, previewView, imageCapture)
 
     Box(
@@ -56,9 +57,7 @@ fun CameraArea(
                 previewView
             },
             modifier = Modifier.fillMaxSize()
-        ) {
-
-        }
+        )
     }
 }
 
@@ -104,14 +103,21 @@ private fun ShowCameraPreview(
     previewView: PreviewView,
     imageCapture: ImageCapture
 ) {
-    val cameraPreview = Preview.Builder().build()
+    // 카메라 뷰를 띄우기 위한 설정
+    val cameraPreview = Preview.Builder().build().also {
+        // 프리뷰에 setSurfaceProvider() 전달
+        // 이미지 데이터 받을 준비가 끝난 신호를 카메라에게 전달
+        it.setSurfaceProvider(previewView.surfaceProvider)
+    }
+    // 카메라에 생명주기 binding
     val cameraProvider = ProcessCameraProvider.getInstance(context).get()
+    // 후면 카메라 설정
     val cameraSelector = CameraSelector.Builder()
         .requireLensFacing(CameraSelector.LENS_FACING_BACK)
         .build()
 
-    cameraPreview.setSurfaceProvider(previewView.surfaceProvider)
-
+    // 생명주기 binding
+    // 다시 binding 되기 전 모든 binding 해제
     cameraProvider.unbindAll()
     cameraProvider.bindToLifecycle(
         lifecycleOwner,
@@ -126,24 +132,29 @@ fun takePhoto(
     imageCapture: ImageCapture,
     mainScreenViewModel: MainScreenViewModel
 ) {
+    // 이미지 파일 이름
     val name = SimpleDateFormat(
         "yyyy-MM-dd-HH-mm-ss-SSS",
         Locale.KOREAN
     ).format(System.currentTimeMillis())
+    // 파일 생성
     val photoFile = File(
-        context.cacheDir,
+        context.cacheDir,   // 찍은 이미지를 임시 경로에 저장 (저장 x)
         "$name.jpeg"
     )
+    // 이미지 저장하기 위한 옵션
     val outputOptions = ImageCapture.OutputFileOptions
         .Builder(photoFile)
         .build()
 
+    // 사진 촬영
     imageCapture.takePicture(
         outputOptions,
         ContextCompat.getMainExecutor(context),
         object : ImageCapture.OnImageSavedCallback {
             override fun onImageSaved(outputFileResults: ImageCapture.OutputFileResults) {
                 println("onSuccess saved ${photoFile.name}")
+                // viewModel을 통해 서버로 이미지 전송
                 mainScreenViewModel.onUploadFaceImage(photoFile)
             }
 

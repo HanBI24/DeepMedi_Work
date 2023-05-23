@@ -17,6 +17,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             DeepMediWorkTheme {
+                // navigation 객체 생성 및 설정
                 navController = rememberNavController()
                 SetUpNavGraph(navController)
             }

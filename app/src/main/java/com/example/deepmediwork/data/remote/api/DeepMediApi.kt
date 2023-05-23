@@ -10,12 +10,15 @@ import retrofit2.http.Part
 
 interface DeepMediApi {
 
+    // 이미지 전송
+    // 파일 전송을 위한 Multipart Annotation
     @Multipart
     @POST("/deepmedi-test-first")
     suspend fun uploadFaceImage(
         @Part file: MultipartBody.Part
     ): UploadFaceImageDto
 
+    // 유저 데이터 가져옴
     @GET("/deepmedi-test-second")
     suspend fun getUserInfo(): UserInfoDto
 }

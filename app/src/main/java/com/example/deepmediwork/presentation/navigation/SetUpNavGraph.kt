@@ -10,11 +10,12 @@ import com.example.deepmediwork.presentation.view.main.SetNavMainScreen
 import com.example.deepmediwork.presentation.view.result.ResultScreen
 import com.example.deepmediwork.presentation.view.result.SetNavResultScreen
 
+// navigation을 통한 화면 전환 설정
 @Composable
 fun SetUpNavGraph(navController: NavHostController) {
     NavHost(
         navController = navController,
-        startDestination = NavScreen.Home.route
+        startDestination = NavScreen.Home.route     // 초기 화면 설정
     ) {
         composable(route = NavScreen.Home.route) {
             SetNavMainScreen(navController)

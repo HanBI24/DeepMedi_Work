@@ -31,7 +31,7 @@ fun ResultScreen(
     userInfo: UserInfoItem
 ) {
     Column {
-        ResultTopAppBar(navController = navController)
+        ResultTopAppBar(navController = navController)  // AppBar
         DefaultInfoText()
         DefaultUserInfo(userInfo = userInfo)
         Divider(
@@ -39,7 +39,7 @@ fun ResultScreen(
             color = DeepMediColor.Gray
         )
         HealthStateInfoText()
-        UserHealthInfoLazyGrid(userInfo)
+        UserHealthInfoLazyGrid(userInfo)  // 서버에서 가져온 사용자 정보 출력
     }
 }
 
@@ -185,6 +185,7 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
         "알코올 농도",
         "SpO2",
     )
+    // 사용자 정보 저장
     val userInfoList = listOf(
         userInfo.bpm,
         "${userInfo.sys}/${userInfo.dia}",
@@ -206,9 +207,10 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
         "%"
     )
 
+    // 격자 리스트 출력
     LazyVerticalGrid(
         modifier = Modifier.padding(top = 20.dp, start = 20.dp, end = 20.dp),
-        columns = GridCells.Fixed(4),
+        columns = GridCells.Fixed(4),   // 한 열에 4개의 셀로 고정
         content = {
             items(textInfoList.size) { index ->
                 Box(
@@ -239,6 +241,7 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
                                 fontWeight = FontWeight.SemiBold
                             ),
                         )
+                        // 사용자 수치에 따른 정보 출력
                         CheckUserHealthInfo(userInfoList[index], index)
                     }
                 }

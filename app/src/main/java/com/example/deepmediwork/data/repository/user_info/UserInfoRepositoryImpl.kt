@@ -10,6 +10,7 @@ class UserInfoRepositoryImpl @Inject constructor(
     private val deepMediApi: DeepMediApi
 ) : UserInfoRepository {
 
+    // 유저 데이터 반환
     override suspend fun getUserInfo(): UserInfoItem {
         return deepMediApi.getUserInfo().toUserInfoItem()
     }

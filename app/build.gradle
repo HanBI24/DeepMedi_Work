@@ -91,7 +91,7 @@ dependencies {
     // Coil
     implementation("io.coil-kt:coil-compose:1.3.2")
 
-    //permission
+    // permission
     implementation "com.google.accompanist:accompanist-permissions:0.24.9-beta"
 
     // camerax

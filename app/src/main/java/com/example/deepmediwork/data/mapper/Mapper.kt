@@ -5,6 +5,7 @@ import com.example.deepmediwork.data.remote.dto.user_info.UserInfoDto
 import com.example.deepmediwork.domain.remote.model.upload.UploadFaceImageItem
 import com.example.deepmediwork.domain.remote.model.user_info.UserInfoItem
 
+// 클린 아키텍처를 위한 Mapper
 object Mapper {
 
     fun UploadFaceImageDto.toUploadFaceImageItem(): UploadFaceImageItem {

@@ -20,6 +20,7 @@ class ResultScreenViewModel @Inject constructor(
     private val _userInfoState = mutableStateOf(UserInfoItem(false, 0, 0, 0, 0, "NULL", "NULL", 0, 0, 0, 0, 0.0))
     val userInfoState: State<UserInfoItem> = _userInfoState
 
+    // 유저 데이터를 state로 저장
     init {
         viewModelScope.launch {
             _userInfoState.value = userInfoRepository.getUserInfo()

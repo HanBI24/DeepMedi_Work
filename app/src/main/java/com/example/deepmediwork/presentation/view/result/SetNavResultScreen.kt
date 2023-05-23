@@ -9,8 +9,10 @@ import com.example.deepmediwork.presentation.viewmodel.ResultScreenViewModel
 fun SetNavResultScreen(
     navController: NavHostController
 ) {
+    // state 가져옴
     val resultScreenViewModel: ResultScreenViewModel = hiltViewModel()
     val userInfo = resultScreenViewModel.userInfoState.value
 
+    // 결과 화면 출력
     ResultScreen(navController = navController, userInfo = userInfo)
 }

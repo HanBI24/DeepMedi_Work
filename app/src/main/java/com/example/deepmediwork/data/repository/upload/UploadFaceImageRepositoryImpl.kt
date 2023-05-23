@@ -16,6 +16,7 @@ class UploadFaceImageRepositoryImpl @Inject constructor(
     private val deepMediApi: DeepMediApi
 ) : UploadFaceImageRepository {
 
+    // 이미지 전송 (Multipart 형식)
     override suspend fun uploadFaceImage(file: File): UploadFaceImageItem {
         return deepMediApi.uploadFaceImage(
             MultipartBody.Part.createFormData(

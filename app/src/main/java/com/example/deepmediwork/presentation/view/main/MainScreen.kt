@@ -40,30 +40,35 @@ fun MainScreen(
     mainScreenViewModel: MainScreenViewModel,
     resultStateCode: Int
 ) {
+    // 카메라 띄우기 위한 객체 설정
     val lifecycleOwner = LocalLifecycleOwner.current
     val context = LocalContext.current
-
     val imageCapture = ImageCapture.Builder()
         .setTargetAspectRatio(AspectRatio.RATIO_4_3)
         .build()
+    // 카메라 뷰 상태를 기억해야 bind가 풀리지 않음
     val previewView = remember { PreviewView(context) }
 
+    // 만약 사진 파일이 정상적으로 업로드 되었다면
     if (resultStateCode == 200) {
         LaunchedEffect(true) {
+            // 1.5초 후에 결과화면 이동 및 state 초기화
             delay(1500)
             mainScreenViewModel.resetState()
             navController.navigate(NavScreen.Result.route)
         }
     }
 
+    // Main 화면 구성
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        HomeTopAppBar()
-        if (resultStateCode == 200) RecognizeFinishText()
-        else RecognizeText()
-        if (resultStateCode == 200) CameraAreaSuccess()
+        HomeTopAppBar()     // AppBar
+        if (resultStateCode == 200) RecognizeFinishText()   // 사진이 정상 업로드 되었을 때
+        else RecognizeText()                                // 안 되었을 때 (기본화면)
+        if (resultStateCode == 200) CameraAreaSuccess()     // 사진이 정상 업로드 되었을 때
+        // 안 되었을 때 (기본화면, 카메라)
         else CameraArea(context, lifecycleOwner, imageCapture, previewView)
-        ShotButton(imageCapture, mainScreenViewModel, context)
-        Image(
+        ShotButton(imageCapture, mainScreenViewModel, context)    // 촬영 버튼
+        Image(                                                    // Step Indicator 이미지
             rememberImagePainter(R.drawable.step_indicator),
             modifier = Modifier.size(350.dp),
             contentDescription = "Step Image Indicator"
@@ -146,6 +151,7 @@ fun ShotButton(
             .size(80.dp)
             .background(color = DeepMediColor.Red, shape = CircleShape)
             .clickable {
+                // 사진 촬영 버튼 클릭 시 촬영 및 이미지 파일 생성, 서버 전달
                 takePhoto(context, imageCapture, mainScreenViewModel)
             },
         contentAlignment = Alignment.Center

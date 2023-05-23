@@ -9,10 +9,13 @@ import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
 fun SetNavMainScreen(
     navController: NavHostController
 ) {
+    // 권한 설정
     RequestPermission()
 
+    // state 가져옴
     val mainScreenViewModel: MainScreenViewModel = hiltViewModel()
     val resultStateCode = mainScreenViewModel.stateCode.value.code
 
+    // 메인 화면 출력
     MainScreen(navController, mainScreenViewModel, resultStateCode)
 }

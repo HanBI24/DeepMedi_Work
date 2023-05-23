@@ -2,6 +2,7 @@ package com.example.deepmediwork.presentation.view.result
 
 import androidx.compose.runtime.Composable
 
+// 사용자 수치에 따른 정보 출력
 @Composable
 fun CheckUserHealthInfo(
     userInfo: Any,
@@ -17,7 +18,7 @@ fun CheckUserHealthInfo(
                 else -> RoundedHealthShapeDanger()
             }
         }
-        1 -> {
+        1 -> {      // sys와 dia 중 더 안 좋은 수치 출력
             val sysDia = userInfoString.split('/')
 
             val sysData = sysDia[0].toInt()

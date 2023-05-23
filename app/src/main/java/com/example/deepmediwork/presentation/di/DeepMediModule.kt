@@ -18,6 +18,7 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 private object DeepMediModule {
 
+    // API 의존성 주입
     @Provides
     @Singleton
     fun provideDeepMediApi(): DeepMediApi {
@@ -28,6 +29,7 @@ private object DeepMediModule {
             .create(DeepMediApi::class.java)
     }
 
+    // UploadFaceImageRepository 의존성 주입
     @Provides
     @Singleton
     fun provideUploadFaceImageRepository(
@@ -36,6 +38,7 @@ private object DeepMediModule {
         return UploadFaceImageRepositoryImpl(deepMediApi)
     }
 
+    // UserInfoRepository 의존성 주입
     @Provides
     @Singleton
     fun provideUserInfoRepository(
