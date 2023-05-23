@@ -1,5 +1,6 @@
 # DeepMedi_Work
-딥메디 개발 과제입니다.
+딥메디 개발 과제입니다.  
+[[GitHub]](https://github.com/HanBI24/DeepMedi_Work)
 
 <br>
 
