@@ -1,7 +1,10 @@
 package com.example.deepmediwork.presentation.view.main
 
 import android.content.Context
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageCapture
+import androidx.camera.core.ImageCaptureException
+import androidx.camera.core.Preview
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.BorderStroke
@@ -15,17 +18,15 @@ import androidx.compose.material.Icon
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
+import com.example.deepmediwork.ui.theme.DeepMediColor
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -46,7 +47,7 @@ fun CameraArea(
             .border(
                 BorderStroke(
                     width = 3.dp,
-                    color = Color(0xFFD03843)
+                    color = DeepMediColor.Red
                 )
             )
     ) {
@@ -70,14 +71,14 @@ fun CameraAreaSuccess() {
             .border(
                 BorderStroke(
                     width = 3.dp,
-                    color = Color(0xFFD03843)
+                    color = DeepMediColor.Red
                 )
             )
     ) {
         Box(
             modifier = Modifier
                 .fillMaxSize()
-                .background(color = Color(0xFFD9FFEC))
+                .background(color = DeepMediColor.Green)
         ) {
             Box(
                 modifier = Modifier.fillMaxSize(),
@@ -89,7 +90,7 @@ fun CameraAreaSuccess() {
                         .padding(100.dp),
                     imageVector = Icons.Default.Check,
                     contentDescription = "Success Icon",
-                    tint = Color.White
+                    tint = DeepMediColor.White
                 )
             }
         }

@@ -13,6 +13,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.deepmediwork.ui.theme.DeepMediColor
 
 @Composable
 fun RoundedHealthShapeNormal() {
@@ -20,7 +21,7 @@ fun RoundedHealthShapeNormal() {
         modifier = Modifier
             .size(40.dp, 20.dp)
             .background(
-                color = Color(0xFF66B300),
+                color = DeepMediColor.NormalGreen,
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
@@ -42,7 +43,7 @@ fun RoundedHealthShapeCare() {
         modifier = Modifier
             .size(40.dp, 20.dp)
             .background(
-                color = Color(0xFFFFD000),
+                color = DeepMediColor.CareYellow,
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
@@ -64,7 +65,7 @@ fun RoundedHealthShapeWarn() {
         modifier = Modifier
             .size(40.dp, 20.dp)
             .background(
-                color = Color(0xFFFF6C00),
+                color = DeepMediColor.WarnOrange,
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center
@@ -86,7 +87,7 @@ fun RoundedHealthShapeDanger() {
         modifier = Modifier
             .size(40.dp, 20.dp)
             .background(
-                color = Color(0xFFDF0000),
+                color = DeepMediColor.Red,
                 shape = CircleShape
             ),
         contentAlignment = Alignment.Center

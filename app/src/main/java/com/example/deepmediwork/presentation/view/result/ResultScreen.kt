@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -24,6 +23,7 @@ import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.deepmediwork.domain.remote.model.user_info.UserInfoItem
+import com.example.deepmediwork.ui.theme.DeepMediColor
 
 @Composable
 fun ResultScreen(
@@ -36,7 +36,7 @@ fun ResultScreen(
         DefaultUserInfo(userInfo = userInfo)
         Divider(
             modifier = Modifier.padding(top = 16.dp, start = 20.dp, end = 20.dp),
-            color = Color(0xFFD8D8D8)
+            color = DeepMediColor.Gray
         )
         HealthStateInfoText()
         UserHealthInfoLazyGrid(userInfo)
@@ -63,7 +63,7 @@ fun ResultTopAppBar(
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold
                 ),
-                color = Color(0xFFD03843)
+                color = DeepMediColor.Red
             )
         }
         Text(
@@ -77,7 +77,7 @@ fun ResultTopAppBar(
             )
         )
     }
-    Divider(color = Color(0xFFD8D8D8))
+    Divider(color = DeepMediColor.Gray)
 }
 
 @Composable
@@ -92,7 +92,7 @@ fun DefaultInfoText() {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             ),
-            color = Color(0xFFD03843)
+            color = DeepMediColor.Red
         )
     }
 }
@@ -160,7 +160,7 @@ fun HealthStateInfoText() {
                 fontSize = 18.sp,
                 fontWeight = FontWeight.SemiBold
             ),
-            color = Color(0xFFD03843)
+            color = DeepMediColor.Red
         )
         Text(
             modifier = Modifier.padding(top = 20.dp),
@@ -215,8 +215,8 @@ fun UserHealthInfoLazyGrid(userInfo: UserInfoItem) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(130.dp)
-                        .border(width = 0.3.dp, color = Color(0xFFD8D8D8))
-                        .background(color = Color(0xFFFDF5F6)),
+                        .border(width = 0.3.dp, color = DeepMediColor.Gray)
+                        .background(color = DeepMediColor.Pink),
                 ) {
                     Column(
                         modifier = Modifier.fillMaxSize(),

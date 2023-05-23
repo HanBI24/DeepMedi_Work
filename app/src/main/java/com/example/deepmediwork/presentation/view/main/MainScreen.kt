@@ -2,24 +2,17 @@ package com.example.deepmediwork.presentation.view.main
 
 import android.content.Context
 import androidx.camera.core.*
-import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.Button
 import androidx.compose.material.Divider
-import androidx.compose.material.Icon
 import androidx.compose.material.Text
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.text.SpanStyle
@@ -30,18 +23,14 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.viewinterop.AndroidView
-import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.NavHostController
 import coil.annotation.ExperimentalCoilApi
 import coil.compose.rememberImagePainter
 import com.example.deepmediwork.R
 import com.example.deepmediwork.navigation.NavScreen
 import com.example.deepmediwork.presentation.viewmodel.MainScreenViewModel
+import com.example.deepmediwork.ui.theme.DeepMediColor
 import kotlinx.coroutines.delay
-import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 
 @OptIn(ExperimentalCoilApi::class)
@@ -98,7 +87,7 @@ fun HomeTopAppBar() {
             )
         )
     }
-    Divider(color = Color(0xFFD8D8D8))
+    Divider(color = DeepMediColor.Gray)
 }
 
 @Composable
@@ -109,7 +98,7 @@ fun RecognizeText() {
             append("얼굴 인식을 위해\n")
             withStyle(
                 style = SpanStyle(
-                    color = Color(0xFFD03843)
+                    color = DeepMediColor.Red
                 )
             ) {
                 append("화면을 응시")
@@ -132,7 +121,7 @@ fun RecognizeFinishText() {
             append("얼굴 인식 ")
             withStyle(
                 style = SpanStyle(
-                    color = Color(0xFFD03843)
+                    color = DeepMediColor.Red
                 )
             ) {
                 append("성공")
@@ -155,7 +144,7 @@ fun ShotButton(
     Box(
         modifier = Modifier
             .size(80.dp)
-            .background(color = Color(0xFFD03843), shape = CircleShape)
+            .background(color = DeepMediColor.Red, shape = CircleShape)
             .clickable {
                 takePhoto(context, imageCapture, mainScreenViewModel)
             },
@@ -164,8 +153,8 @@ fun ShotButton(
         Box(
             modifier = Modifier
                 .size(70.dp)
-                .background(color = Color(0xFFD03843), shape = CircleShape)
-                .border(width = 4.dp, color = Color.White, shape = CircleShape)
+                .background(color = DeepMediColor.Red, shape = CircleShape)
+                .border(width = 4.dp, color = DeepMediColor.White, shape = CircleShape)
         )
     }
 }
